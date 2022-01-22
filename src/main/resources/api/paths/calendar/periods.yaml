@@ -2,7 +2,6 @@ get:
   operationId: getDateOpenings
   description: List all information for each calendar day
   parameters:
-    - $ref: ../../parameters/x-okapi-tenant.yaml
     - in: query
       name: servicePointId
       required: false
@@ -70,7 +69,7 @@ get:
           schema:
             $ref: ../../schemas/openingDayConcreteCollection.yaml
     "400":
-      description: Invalid request (could not be understood)
+      description: Invalid request or parameters
       content:
         application/json:
           schema:

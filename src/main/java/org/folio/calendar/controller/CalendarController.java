@@ -24,6 +24,7 @@ import org.folio.calendar.rest.resource.CalendarApi;
 import org.folio.calendar.service.CalendarService;
 import org.folio.calendar.utils.DateUtils;
 import org.folio.calendar.utils.PeriodUtils;
+import org.folio.calendar.utils.TimeConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,11 +48,7 @@ public final class CalendarController implements CalendarApi {
 
   /** {@inheritDoc} */
   @Override
-  public ResponseEntity<Period> addNewPeriod(
-    String xOkapiTenant,
-    UUID servicePointId,
-    Period period
-  ) {
+  public ResponseEntity<Period> addNewPeriod(UUID servicePointId, Period period) {
     Calendar calendar = this.calendarService.createCalendarFromPeriod(period, servicePointId);
 
     return new ResponseEntity<>(PeriodUtils.toPeriod(calendar), HttpStatus.CREATED);
@@ -60,7 +57,6 @@ public final class CalendarController implements CalendarApi {
   /** {@inheritDoc} */
   @Override
   public ResponseEntity<PeriodCollection> getPeriodsForServicePoint(
-    String xOkapiTenant,
     UUID servicePointId,
     Boolean withOpeningDays,
     Boolean showPast,
@@ -86,11 +82,7 @@ public final class CalendarController implements CalendarApi {
 
   /** {@inheritDoc} */
   @Override
-  public ResponseEntity<Period> getPeriodById(
-    String xOkapiTenant,
-    UUID servicePointId,
-    UUID periodId
-  ) {
+  public ResponseEntity<Period> getPeriodById(UUID servicePointId, UUID periodId) {
     return new ResponseEntity<>(
       PeriodUtils.toPeriod(this.calendarService.getCalendarById(servicePointId, periodId)),
       HttpStatus.OK
@@ -99,11 +91,7 @@ public final class CalendarController implements CalendarApi {
 
   /** {@inheritDoc} */
   @Override
-  public ResponseEntity<Void> deletePeriodById(
-    String xOkapiTenant,
-    UUID servicePointId,
-    UUID periodId
-  ) {
+  public ResponseEntity<Void> deletePeriodById(UUID servicePointId, UUID periodId) {
     Calendar calendar = this.calendarService.getCalendarById(servicePointId, periodId);
 
     this.calendarService.deleteCalendar(calendar);
@@ -114,12 +102,7 @@ public final class CalendarController implements CalendarApi {
   /** {@inheritDoc} */
   @Override
   @SuppressWarnings("java:S1141")
-  public ResponseEntity<Void> updatePeriodById(
-    String xOkapiTenant,
-    UUID servicePointId,
-    UUID periodId,
-    Period period
-  ) {
+  public ResponseEntity<Void> updatePeriodById(UUID servicePointId, UUID periodId, Period period) {
     try {
       Calendar originalCalendar = this.calendarService.getCalendarById(periodId);
 
@@ -137,7 +120,6 @@ public final class CalendarController implements CalendarApi {
   /** {@inheritDoc} */
   @Override
   public ResponseEntity<OpeningDayConcreteCollection> getDateOpenings(
-    String xOkapiTenant,
     UUID servicePointId,
     LocalDate startDate,
     LocalDate endDate,
@@ -189,7 +171,6 @@ public final class CalendarController implements CalendarApi {
   /** {@inheritDoc} */
   @Override
   public ResponseEntity<CalculatedOpenings> getNearestOpenings(
-    String xOkapiTenant,
     UUID servicePointId,
     LegacyPeriodDate requestedDate
   ) {
@@ -242,7 +223,12 @@ public final class CalendarController implements CalendarApi {
     if (currentIndex >= 0) {
       current = allOpenings.get(currentIndex).getOpeningDay().withDate(requestedDate);
       if (Boolean.FALSE.equals(current.isOpen())) {
-        current = empty.withAllDay(true).withDate(requestedDate);
+        current =
+          empty
+            .withAllDay(true)
+            .withDate(requestedDate)
+            .withExceptional(true)
+            .withOpeningHour(Arrays.asList(TimeConstants.ALL_DAY));
       }
       prevIndex = currentIndex - 1;
       nextIndex = currentIndex + 1;
@@ -252,6 +238,7 @@ public final class CalendarController implements CalendarApi {
       // the array: the index of the first element greater than the key, or a.length if all
       // elements in the array are less than the specified key
       current = empty.withAllDay(true).withDate(requestedDate);
+
       nextIndex = (currentIndex + 1) * -1;
       prevIndex = nextIndex - 1;
     }

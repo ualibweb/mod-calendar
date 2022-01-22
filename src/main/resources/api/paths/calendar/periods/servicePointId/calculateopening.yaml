@@ -2,7 +2,6 @@ get:
   operationId: getNearestOpenings
   description: Calculate openings nearest to a given date
   parameters:
-    - $ref: ../../../../parameters/x-okapi-tenant.yaml
     - $ref: ../../../../parameters/servicePointId.yaml
     - in: query
       name: requestedDate
@@ -19,7 +18,7 @@ get:
           schema:
             $ref: ../../../../schemas/calculatedOpenings.yaml
     "400":
-      description: Invalid request (could not be understood)
+      description: Invalid request or parameters
       content:
         application/json:
           schema:

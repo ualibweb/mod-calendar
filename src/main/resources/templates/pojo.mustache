@@ -1,9 +1,10 @@
-import javax.annotation.CheckForNull;
+import javax.annotation.Nullable;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Singular;
 import lombok.With;
 
@@ -14,9 +15,10 @@ import lombok.With;
 {{>generatedAnnotation}}{{#discriminator}}{{>typeInfoAnnotation}}{{/discriminator}}{{>xmlAnnotation}}{{>additionalModelTypeAnnotations}}
 @Data
 @With
+@NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-@SuppressWarnings("unused")
+@SuppressWarnings("unused") // some imports may not be used
 public class {{classname}} {{#parent}}extends {{{.}}}{{/parent}}{{^parent}}{{#hateoas}}extends RepresentationModel<{{classname}}> {{/hateoas}}{{/parent}} {{#serializableModel}}implements Serializable{{/serializableModel}} {
   {{#vars}}
   {{#description}}
@@ -42,7 +44,7 @@ public class {{classname}} {{#parent}}extends {{{.}}}{{/parent}}{{^parent}}{{#ha
   @SerializedName("{{baseName}}")
   {{/gson}}
   {{^required}}
-  @CheckForNull
+  @Nullable
   {{/required}}
   {{#isContainer}}
   {{#useBeanValidation}}@Valid{{/useBeanValidation}}

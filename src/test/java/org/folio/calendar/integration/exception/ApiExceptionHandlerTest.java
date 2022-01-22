@@ -88,7 +88,7 @@ class ApiExceptionHandlerTest extends BaseApiTest {
     Response response = ra(false)
       .patch(getRequestUrl(String.format(VALID_API_ROUTE, UUIDs.UUID_0)));
 
-    response.then().statusCode(is(HttpStatus.NOT_FOUND.value()));
+    response.then().statusCode(is(HttpStatus.METHOD_NOT_ALLOWED.value()));
 
     ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
 
@@ -96,7 +96,7 @@ class ApiExceptionHandlerTest extends BaseApiTest {
     assertThat(
       "Error HTTP code is correct",
       errorResponse.getStatus(),
-      is(HttpStatus.NOT_FOUND.value())
+      is(HttpStatus.METHOD_NOT_ALLOWED.value())
     );
     assertThat("One error was returned", errorResponse.getErrors(), hasSize(1));
 
