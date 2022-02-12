@@ -61,3 +61,14 @@ also run only certain methods themselves with `-Dtest=SomeClassTest#testSomeMeth
 
 The unit tests can be annoyingly slow for certain development build processes. To skip them, add
 `-Dmaven.test.skip=true` to the command line.
+
+## Maven Debugging
+
+With [maven-profiler](https://github.com/jcgay/maven-profiler) (included in
+[maven-deluxe](https://github.com/jcgay/maven-deluxe)), you can use the following to profile Maven:
+
+```sh
+mvn {your commands} -DprofileFormat=HTML,CONSOLE -Dprofile="Name"
+```
+
+The profile allows you to label profiles if comparing different options.
