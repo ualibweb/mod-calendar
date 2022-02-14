@@ -67,3 +67,14 @@ debugging the build process itself). To skip tests, add `-DskipTests` to the com
 
 Please note, this is likely to produce strange (or entirely wrong) results from JaCoCo (for code
 coverage).
+
+## Maven Debugging
+
+With [maven-profiler](https://github.com/jcgay/maven-profiler) (included in
+[maven-deluxe](https://github.com/jcgay/maven-deluxe)), you can use the following to profile Maven:
+
+```sh
+mvn {your commands} -DprofileFormat=HTML,CONSOLE -Dprofile="Name"
+```
+
+The profile allows you to label profiles if comparing different options.
