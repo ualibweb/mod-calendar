@@ -1,5 +1,7 @@
 # mod-calendar
 
+# This work has been merged into `folio-org`; all future work should be done there.
+
 Copyright (C) 2017-2022 The Open Library Foundation
 
 This software is distributed under the terms of the Apache License, Version 2.0. See the file
